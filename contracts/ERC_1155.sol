@@ -9,8 +9,6 @@ contract ERC1155Study is ERC1155 {
     uint256 public silver = 1;
     uint256 public gold = 2;
     uint256 public Diamond = 3;
-    mapping(address => uint256) public postCount;
-    mapping(address => uint256) public rewardTotal;
 
     modifier onlyOwner() {
         require(msg.sender == owner, "onlyOwner");
@@ -28,26 +26,29 @@ contract ERC1155Study is ERC1155 {
     ) public onlyOwner {
         _mint(to, id, amount, "");
     }
-    
-    function mintBadgeIfQualified(address user, uint256 id) public onlyOwner {
-        if (id == silver) {
-            require(
-                postCount[user] >= 3 && rewardTotal[user] >= 10,
-                "Not qualified for silver"
-            );
-        } else if (id == gold) {
-            require(
-                postCount[user] >= 10 && rewardTotal[user] >= 30,
-                "Not qualified for gold"
-            );
-        } else if (id == Diamond) {
-            require(
-                postCount[user] >= 20 && rewardTotal[user] >= 100,
-                "Not qualified for diamond"
-            );
-        }
-        _mint(user, id, 1, "");
+
+    function getclass(address id) public view returns(){
+        balanceOfBatch(id)
     }
+    // function mintBadgeIfQualified(address user, uint256 id) public onlyOwner {
+    //     if (id == silver) {
+    //         require(
+    //             postCount[user] >= 3 && rewardTotal[user] >= 10,
+    //             "Not qualified for silver"
+    //         );
+    //     } else if (id == gold) {
+    //         require(
+    //             postCount[user] >= 10 && rewardTotal[user] >= 30,
+    //             "Not qualified for gold"
+    //         );
+    //     } else if (id == Diamond) {
+    //         require(
+    //             postCount[user] >= 20 && rewardTotal[user] >= 100,
+    //             "Not qualified for diamond"
+    //         );
+    //     }
+    //     _mint(user, id, 1, "");
+    // }
 }
 
 // 메서드	설명	ERC-20/721과 비교

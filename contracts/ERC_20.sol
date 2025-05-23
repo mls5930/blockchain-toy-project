@@ -25,9 +25,4 @@ contract StudyTokenKiros is ERC20 {
     function minting(address to, uint256 value) public onlyOwner {
         _mint(to, value);
     }
-    function CAtransfer(address, uint256 value) public payable onlyOwner {
-        require(msg.value != 0.5 ether, "give 0.5eth");
-        payable(owner)
-        transferFrom(owner, msg.sender, value);
-    }
 }
