@@ -3,26 +3,29 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract StudyTokenKiros is ERC20 {
+contract ERC_20 is ERC20 {
     address public owner;
     address public caAddress;
 
-    constructor(address _caAddress) ERC20("StudyTokenKiros", "STK") {
+    constructor() ERC20("StudyTokenKiros", "STK") {
         owner = msg.sender;
-        caAddress = _caAddress;
-
         uint256 initialSupply = 1_000_000 * 10 ** decimals();
         _mint(owner, initialSupply);
-
-        // 권한 위임 (owner → CA)
-        _approve(owner, caAddress, initialSupply);
     }
     modifier onlyOwner() {
         require(msg.sender == owner, "onlyOwner");
         _;
     }
-    // 새로운 발급.
+
+    function approveForCA(address _ca) public onlyOwner {
+        //권한부여함수
+        require(caAddress == address(0), "CA already set");
+        caAddress = _ca;
+        _approve(owner, _ca, totalSupply());
+    }
+
     function minting(address to, uint256 value) public onlyOwner {
+        //새로운 발급
         _mint(to, value);
     }
 }

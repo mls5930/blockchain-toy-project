@@ -29,45 +29,17 @@ sol 파일 흐름
 3. MultiTokenFactory 로 해당 토큰들을 관리 
 
 
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
 
-import "./MyERC20.sol";
-import "./MyERC721.sol";
-import "./MyERC1155.sol";
+**flor** 
 
-contract MultiTokenFactory {
-    enum TokenType { ERC20, ERC721, ERC1155 }
-
-    struct TokenInfo {
-        address tokenAddress;
-        TokenType tokenType;
-        string name;
-    }
-
-    TokenInfo[] public allTokens;
-
-    event TokenCreated(address indexed tokenAddress, TokenType tokenType, string name);
-
-    function createERC20(string memory name, string memory symbol, uint256 initialSupply) public {
-        MyERC20 token = new MyERC20(name, symbol, initialSupply);
-        allTokens.push(TokenInfo(address(token), TokenType.ERC20, name));
-        emit TokenCreated(address(token), TokenType.ERC20, name);
-    }
-
-    function createERC721(string memory name, string memory symbol) public {
-        MyERC721 token = new MyERC721(name, symbol);
-        allTokens.push(TokenInfo(address(token), TokenType.ERC721, name));
-        emit TokenCreated(address(token), TokenType.ERC721, name);
-    }
-
-    function createERC1155(string memory uri) public {
-        MyERC1155 token = new MyERC1155(uri);
-        allTokens.push(TokenInfo(address(token), TokenType.ERC1155, uri));
-        emit TokenCreated(address(token), TokenType.ERC1155, uri);
-    }
-
-    function getAllTokens() public view returns (TokenInfo[] memory) {
-        return allTokens;
-    }
-}
+1. ERC 20 배포 owner 에게 STK 토큰 100만개 발급
+2. 권한 위임 CA와 postWarld CA에게 
+3. 1155 배포 url 과  postWarld CA에게 권한위임
+4. 권한을 넘겨받은 postWarld 는 토큰 발급권한이 생김
+5. 사용자가 이더 충전  1 eth 당 * 10 해서 10개의 STK 발급
+6. 사용자가 글쓰기시 1 STK 차감 하는형식
+7. 글쓸떄마다 사용자의 글 갯수와 STK를 판단하여 class 지급
+8. 글을 작성한 유저는 user[] 에 저장이되며 중복으로 들어갈수 없음 (user 조회는 관리자만)
+9. 작성한글은 Post[] 형태로 작성시간 작성자 작성글 이 들어감 (조회는 관리자만)
+10. 멤버승인 함수 멤버는 오직 관리자만이 지정할 수 있다.
+11. user class 조회 ex) silver gold dia 모든유저가 조회가능
