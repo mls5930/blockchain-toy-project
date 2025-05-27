@@ -94,8 +94,8 @@ contract board {
     }
     // 리워드 지급과 class 체크
     function checkAndReward(address user) internal returns (uint256) {
-        uint256 count = getpostCount(user);
-        uint256 balance = getrewardTotal(user);
+        uint256 count = getpostCount();
+        uint256 balance = getrewardTotal();
         // uint256 class = token_1155.getClass(user);
         if (member[user]) {
             // NFT 토큰 발급은 멤버일경우만
