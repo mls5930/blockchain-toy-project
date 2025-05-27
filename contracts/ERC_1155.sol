@@ -4,18 +4,22 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 
 contract ERC_1155 is ERC1155 {
-    address private owner;
+    address public owner;
     uint256 public namal = 0;
-    uint256 public silver = 1;
-    uint256 public gold = 2;
-    uint256 public Diamond = 3;
+    uint256 public GOOD = 1;
+    uint256 public BEST = 2;
+    uint256 public EXCELLENT = 3;
 
     modifier onlyOwner() {
         require(msg.sender == owner, "onlyOwner");
         _;
     }
-    // "ipfs://bafybeieiwtzekv5tj2wd7dpmvaqjjtabinrnlsc5f6l5322c33j6ntdtwy/{id}.json"
-    constructor(string memory _uri) ERC1155(_uri) {
+    // "ipfs://bafybeigpwepumxlnre32hyc6ys7esbgij55wxqtd5edfmsj7ux3nypmdfq/{id}.json"
+    constructor()
+        ERC1155(
+            "ipfs://bafybeigpwepumxlnre32hyc6ys7esbgij55wxqtd5edfmsj7ux3nypmdfq/{id}.json"
+        )
+    {
         owner = msg.sender;
     }
 
@@ -24,12 +28,13 @@ contract ERC_1155 is ERC1155 {
         uint256 id,
         uint256 amount,
         string memory message
-    ) public payable onlyOwner {
+    ) public payable {
         _mint(to, id, amount, bytes(message));
     }
-    function setApprovalForPostWarld(address postWarld) public onlyOwner {
+    function setApprovalForPostWarld(address boardID, address _owner) public {
         //권한부여함수
-        _setApprovalForAll(owner, postWarld, true);
+        require(_owner == owner, "not owner");
+        _setApprovalForAll(owner, boardID, true);
     }
 
     function getClass(address useraddress) public view returns (uint256) {
@@ -42,8 +47,24 @@ contract ERC_1155 is ERC1155 {
         } else if (balanceOf(useraddress, 0) > 0) {
             return 0; // Normal
         }
-        return 0;
+        return 9999; // 아직 아무 배지도 없음
     }
+
+    // 전체 NFT 토큰 갯수 확인 함수
+    function getBadgeCounts(
+        address user
+    ) public view returns (uint256[4] memory) {
+        return [
+            balanceOf(user, 0), // Normal
+            balanceOf(user, 1), // GOOD
+            balanceOf(user, 2), // BEST
+            balanceOf(user, 3) // EXCELLENT
+        ];
+    }
+    function getowner() public view returns (address) {
+        return owner;
+    }
+
     // function getClass(address useraddress, uint256 id) public view returns (uint256) {
     //     return balanceOf(useraddress, id);
     // }

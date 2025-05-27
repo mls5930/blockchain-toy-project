@@ -1,0 +1,19 @@
+{
+    "name": "gold",
+    "description": "Class",
+    "image": "ipfs://bafybeia2rxkmjsxe6brgat4dopdzadpxrhkbvgkplssp54qsigy5ruts4u/gold.png",
+    "attributes": [
+        {
+            "trait_type": "cloor",
+            "value": "gold"
+        },
+        {
+            "trait_type": "id",
+            "value": "2"
+        },
+        {
+            "trait_type": "member",
+            "value": "true"
+        }
+    ]
+}

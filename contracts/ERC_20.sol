@@ -17,7 +17,7 @@ contract ERC_20 is ERC20 {
         _;
     }
 
-    function approveForCA(address _ca) public onlyOwner {
+    function approveForCA(address _ca) public {
         //권한부여함수
         require(caAddress == address(0), "CA already set");
         caAddress = _ca;
@@ -27,5 +27,9 @@ contract ERC_20 is ERC20 {
     function minting(address to, uint256 value) public onlyOwner {
         //새로운 발급
         _mint(to, value);
+    }
+
+    function getowner() public view returns (address) {
+        return owner;
     }
 }
