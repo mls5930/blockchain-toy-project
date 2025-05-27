@@ -4,7 +4,7 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 
 contract ERC_1155 is ERC1155 {
-    address private owner;
+    address public owner;
     uint256 public namal = 0;
     uint256 public GOOD = 1;
     uint256 public BEST = 2;
@@ -15,7 +15,11 @@ contract ERC_1155 is ERC1155 {
         _;
     }
     // "ipfs://bafybeigpwepumxlnre32hyc6ys7esbgij55wxqtd5edfmsj7ux3nypmdfq/{id}.json"
-    constructor(string memory _uri) ERC1155(_uri) {
+    constructor()
+        ERC1155(
+            "ipfs://bafybeigpwepumxlnre32hyc6ys7esbgij55wxqtd5edfmsj7ux3nypmdfq/{id}.json"
+        )
+    {
         owner = msg.sender;
     }
 
@@ -27,8 +31,9 @@ contract ERC_1155 is ERC1155 {
     ) public payable {
         _mint(to, id, amount, bytes(message));
     }
-    function setApprovalForPostWarld(address boardID) public {
+    function setApprovalForPostWarld(address boardID, address _owner) public {
         //권한부여함수
+        require(_owner == owner, "not owner");
         _setApprovalForAll(owner, boardID, true);
     }
 
@@ -55,6 +60,9 @@ contract ERC_1155 is ERC1155 {
             balanceOf(user, 2), // BEST
             balanceOf(user, 3) // EXCELLENT
         ];
+    }
+    function getowner() public view returns (address) {
+        return owner;
     }
 
     // function getClass(address useraddress, uint256 id) public view returns (uint256) {

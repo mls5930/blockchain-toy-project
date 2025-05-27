@@ -28,4 +28,8 @@ contract ERC_20 is ERC20 {
         //새로운 발급
         _mint(to, value);
     }
+
+    function getowner() public view returns (address) {
+        return owner;
+    }
 }
