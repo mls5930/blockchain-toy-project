@@ -1,0 +1,19 @@
+{
+    "name": "silver",
+    "description": "Class",
+    "image": "ipfs://bafybeia2rxkmjsxe6brgat4dopdzadpxrhkbvgkplssp54qsigy5ruts4u/silver.png",
+    "attributes": [
+        {
+            "trait_type": "cloor",
+            "value": "silver"
+        },
+        {
+            "trait_type": "id",
+            "value": "1"
+        },
+        {
+            "trait_type": "member",
+            "value": "true"
+        }
+    ]
+}

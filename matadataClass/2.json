@@ -1,0 +1,19 @@
+{
+    "name": "diamond",
+    "description": "Class",
+    "image": "ipfs://bafybeia2rxkmjsxe6brgat4dopdzadpxrhkbvgkplssp54qsigy5ruts4u/Diamond.png",
+    "attributes": [
+        {
+            "trait_type": "cloor",
+            "value": "diamond"
+        },
+        {
+            "trait_type": "id",
+            "value": "3"
+        },
+        {
+            "trait_type": "member",
+            "value": "true"
+        }
+    ]
+}

@@ -4,7 +4,7 @@ pragma solidity ^0.8.20;
 import "./ERC_1155.sol";
 import "./ERC_20.sol";
 
-contract postWarld {
+contract board {
     ERC_20 public token_20;
     ERC_1155 public token_1155;
     address public owner;
@@ -59,10 +59,12 @@ contract postWarld {
         return true;
     }
 
-    // 이더 충전 함수
+    //  트렌잭션 ,글쓰기 함수
     function CAtransfer(
         address userAddress,
-        uint256 value
+        uint256 value,
+        string memory title,
+        string memory content
     ) public payable onlyOwner {
         require(msg.value == 1 ether, "give 1 eth");
         require(token_20.balanceOf(owner) >= value, "Not enough STK");
@@ -70,13 +72,13 @@ contract postWarld {
             token_20.allowance(owner, address(this)) >= value,
             "Your balance is insufficient."
         );
-
+        writePost(title, content);
         payable(owner).transfer(msg.value);
         token_20.transferFrom(owner, userAddress, value * 10);
     }
 
     // 글쓰기 함수
-    function writePost(string memory title, string memory content) public {
+    function writePost(string memory title, string memory content) private {
         Post memory newPost = Post({
             title: title,
             content: content,
@@ -96,33 +98,43 @@ contract postWarld {
         uint256 count = postCount[user];
         uint256 balance = token_20.balanceOf(user);
         uint256 class = token_1155.getClass(user);
-
-        if (count >= 3 && balance >= 10 && balance < 30 && class < 1) {
-            token_1155.mintClass(user, 1, 1, "get silverClass Token");
-            emit BadgeIssued(user, 1, 1);
-            token_20.transferFrom(owner, user, 2); // 실버 보상
-        } else if (count >= 10 && balance >= 30 && balance < 100 && class < 2) {
-            token_1155.mintClass(user, 2, 1, "get goldClass Token");
-            emit BadgeIssued(user, 2, 1);
-            token_20.transferFrom(owner, user, 10); // 골드 보상
-        } else if (count >= 20 && balance >= 100 && class < 3) {
-            token_1155.mintClass(user, 3, 1, "get diamondClass Token");
-            emit BadgeIssued(user, 3, 1);
-            token_20.transferFrom(owner, user, 20); // 다이아 보상
+        if (member[user]) {
+            // NFT 토큰 발급은 멤버일경우만
+            if ((count >= 3 && balance >= 3 && class < 1)) {
+                token_1155.mintClass(user, 1, 1, "get silverClass Token");
+                emit BadgeIssued(user, 1, 1);
+                token_20.transferFrom(owner, user, 2); // 실버 보상
+                rewardTotal[user] += 2;
+            } else if (count >= 10 && balance >= 30 && balance < 100) {
+                token_1155.mintClass(user, 2, 1, "get goldClass Token");
+                emit BadgeIssued(user, 2, 1);
+                token_20.transferFrom(owner, user, 10); // 골드 보상
+                rewardTotal[user] += 10;
+            } else if (count >= 20 && balance >= 100) {
+                token_1155.mintClass(user, 3, 1, "get diamondClass Token");
+                emit BadgeIssued(user, 3, 1);
+                token_20.transferFrom(owner, user, 20); // 다이아 보상
+                rewardTotal[user] += 20;
+            }
         }
+        rewardTotal[user] += 1;
+        token_20.transferFrom(owner, user, 1); // 멤버 미가입 노말보상
     }
     // 작성 글 갯수 확인
     function getpostCount(address userAddress) public view returns (uint256) {
         return postCount[userAddress];
     }
+
     // 유저 class 조회
-    function getClass(address userAddress) public view returns (string memory) {
+    function viewClass(
+        address userAddress
+    ) public view returns (string memory) {
         uint256 class = token_1155.getClass(userAddress);
         if (class == 0) return "Normal";
-        if (class == 1) return "Silver";
-        if (class == 2) return "Gold";
-        if (class == 3) return "Diamond";
-        return "None";
+        if (class == 1) return "GOOD";
+        if (class == 2) return "BEST";
+        if (class == 3) return "EXCELLENT";
+        return "Normal";
     }
 
     // 유저 조회목록(메니저만)
@@ -132,5 +144,21 @@ contract postWarld {
     // 유저 글작성 목록전체 조회(메니저만)
     function getAllPosts() public view onlyAdmin returns (Post[] memory) {
         return allPosts;
+    }
+
+    // 전체 리워드 함수;
+    function getrewardTotal(address _address) public view returns (uint256) {
+        return rewardTotal[_address];
+    }
+
+    // 전체 NFT 토큰 갯수 확인 함수
+    function getBadgeCounts(
+        address _address
+    ) public view returns (uint256[4] memory) {
+        return token_1155.getBadgeCounts(_address);
+    }
+    // 멤버 확인 함수.
+    function isMember() public view returns (bool) {
+        return member[msg.sender];
     }
 }
