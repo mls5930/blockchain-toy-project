@@ -5,6 +5,7 @@ export const Admin = ({ props }) => {
     const { STK, account, setAccount, connectWallet, input, setInput, inputTitel, setinputTitel, tokenMint, reward, viewAllPost, postList
         , myNftToken, myNft, joinMember, message, signUp, member, memderCheck, ClassList, classImg, viewUser, userList, getClass,
         Class } = props
+
     useEffect(() => {
         console.log("최종 ClassList:", ClassList);
     }, [ClassList]);
