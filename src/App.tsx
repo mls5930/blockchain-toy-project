@@ -1,9 +1,9 @@
-import Baseball from './baseball';
+import { Board } from './board/index';
 
 function App() {
     return (
         <div className="App">
-            <Baseball />
+            <Board />
         </div>
     );
 }
