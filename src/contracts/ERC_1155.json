@@ -22886,7 +22886,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.16",
-  "updatedAt": "2025-05-28T00:57:42.821Z",
+  "updatedAt": "2025-05-29T00:51:12.172Z",
   "devdoc": {
     "errors": {
       "ERC1155InsufficientBalance(address,uint256,uint256,uint256)": [

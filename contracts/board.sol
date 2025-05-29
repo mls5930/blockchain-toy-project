@@ -95,7 +95,7 @@ contract board {
     // 리워드 지급과 class 체크
     function checkAndReward(address user) internal returns (uint256) {
         uint256 count = getpostCount();
-        uint256 balance = getrewardTotal();
+        uint256 balance = getrewardTotal(user);
         // uint256 class = token_1155.getClass(user);
         if (member[user]) {
             // NFT 토큰 발급은 멤버일경우만
@@ -142,23 +142,23 @@ contract board {
     function getuser() public view onlyAdmin returns (address[] memory) {
         return users;
     }
-    // 유저 글작성 목록전체 조회(관리자만)
-    function getAllPosts() public view onlyAdmin returns (Post[] memory) {
+    // 유저 글작성 목록전체 조회(수정 함) !
+    function getAllPosts() public view returns (Post[] memory) {
         return allPosts;
     }
 
-    // 리워드 조회 함수;
-    function getrewardTotal() public view returns (uint256) {
-        return rewardTotal[msg.sender];
+    // 리워드 조회 함수; !
+    function getrewardTotal(address _address) public view returns (uint256) {
+        return rewardTotal[_address];
     }
 
-    // 전체 NFT 토큰 갯수 확인 함수
+    // 전체 NFT 토큰 갯수 확인 함수 !
     function getBadgeCounts(
         address _address
     ) public view onlyMember returns (uint256[4] memory) {
         return token_1155.getBadgeCounts(_address);
     }
-    // 멤버 확인 함수.
+    // 멤버 확인 함수. !
     function isMember() public view returns (bool) {
         return member[msg.sender];
     }
